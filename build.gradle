@@ -1,0 +1,39 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'application'
+}
+
+group = 'me.lame'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.pdfbox:pdfbox:2.0.12'
+    compile 'org.apache.pdfbox:jbig2-imageio:3.0.2'
+    compile 'com.github.jai-imageio:jai-imageio-core:1.3.1'
+    compile 'com.github.jai-imageio:jai-imageio-jpeg2000:1.3.0'
+    compile 'com.itextpdf:itextpdf:5.5.11'
+    compile 'com.itextpdf:itext-asian:5.2.0'
+    compile 'commons-io:commons-io:2.4'
+    compile files('./lib/opencv-3410.jar')
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+}
+
+test {
+    useJUnit()
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = '1.8'
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = '1.8'
+}
+
+application {
+    mainClassName = 'MainKt'
+}
