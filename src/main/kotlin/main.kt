@@ -48,5 +48,5 @@ fun mergeToPdf(baseFp: String) {
 
 fun main(args: Array<String>) {
 //    extractPdfImg("D:\\code\\ok-pdf\\src\\main\\resources\\haskhell.pdf","D:\\code\\ok-pdf\\src\\main\\resources")
-    mergeToPdf("D:\\code\\ok-pdf\\src\\main\\resources")
+    mergeToPdf("/media/lame/0DD80F300DD80F30/code/ok-pdf/src/main/resources")
 }

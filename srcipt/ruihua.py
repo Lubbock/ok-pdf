@@ -36,6 +36,7 @@ def piplechain(fp, op):
 
 
 # USM锐化公式表示如下：
+# dst = src1*alpha + src2*beta + gamma;
 # （源图像– w*高斯模糊）/（1-w）；其中w表示权重（0.1～0.9），默认为0.6
 def usm(fp, op):
     src = cv2.imread(fp)
@@ -49,8 +50,8 @@ def usm(fp, op):
 
 
 if __name__ == "__main__":
-    hk = "D:/code/ok-pdf/src/main/resources/hk"
-    for root, dirs, files in os.walk("D:/code/ok-pdf/src/main/resources/haskhell",
+    hk = "/media/lame/0DD80F300DD80F30/code/ok-pdf/src/main/resources/hk"
+    for root, dirs, files in os.walk("/media/lame/0DD80F300DD80F30/code/ok-pdf/src/main/resources/hashhell",
                                      topdown=False):
         for name in files:
             print("\n正在处理图片" + os.path.join(root, name))
