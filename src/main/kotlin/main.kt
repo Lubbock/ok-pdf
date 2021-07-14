@@ -33,20 +33,44 @@ fun mergeToPdf(baseFp: String) {
     println("开始pdf文件转换")
     PDDocument().use { doc ->
         Files.list(File("${baseFp}/hk").toPath())
-                .forEach { filePath ->
-                    val page = PDPage()
-                    doc.addPage(page)
-                    val drawImage = PDImageXObject.createFromFile(filePath.toFile().absolutePath, doc)
-                    val contents = PDPageContentStream(doc, page).use {
-                        it.drawImage(drawImage, 9f, 10f, 566f, 735f)
-                    }
+            .forEach { filePath ->
+                val page = PDPage()
+                doc.addPage(page)
+                val drawImage = PDImageXObject.createFromFile(filePath.toFile().absolutePath, doc)
+                val contents = PDPageContentStream(doc, page).use {
+                    it.drawImage(drawImage, 9f, 10f, 566f, 735f)
                 }
+            }
         doc.save("${baseFp}/haskhell3.pdf")
         doc.close()
     }
 }
 
+//目录提取
+fun extractOutline(fp: String) {
+    PDDocument.load(File(fp))
+        .use { doc -> //文档目录对象
+            val catalog = doc.documentCatalog
+            //文档刚要对象
+            val outline = catalog?.documentOutline
+            var item = outline?.firstChild
+            if (outline != null) {
+                while (item != null) {
+                    println("Item:${item.title}")
+                    var secondChild = item.firstChild
+                    while (secondChild != null) {
+                        println("Item:${secondChild.title}")
+                        secondChild = secondChild.nextSibling
+                    }
+                    item = item.nextSibling
+                }
+            }
+        }
+}
+
 fun main(args: Array<String>) {
-//    extractPdfImg("D:\\code\\ok-pdf\\src\\main\\resources\\haskhell.pdf","D:\\code\\ok-pdf\\src\\main\\resources")
-    mergeToPdf("/media/lame/0DD80F300DD80F30/code/ok-pdf/src/main/resources")
+//    extractPdfImg("File(".").absolutePath+"\src\\main\\resources\\haskhell.pdf","D:\\code\\ok-pdf\\src\\main\\resources")
+//    mergeToPdf("File(".").absolutePath/src/main/resources")
+//    println(File(".").absolutePath)
+
 }
