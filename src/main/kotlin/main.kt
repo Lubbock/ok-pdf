@@ -5,6 +5,8 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.imageio.ImageIO
 
 fun extractPdfImg(fp: String, baseFp: String) {
@@ -69,8 +71,8 @@ fun extractOutline(fp: String) {
 }
 
 fun main(args: Array<String>) {
-//    extractPdfImg("File(".").absolutePath+"\src\\main\\resources\\haskhell.pdf","D:\\code\\ok-pdf\\src\\main\\resources")
-//    mergeToPdf("File(".").absolutePath/src/main/resources")
-//    println(File(".").absolutePath)
+//    extractPdfImg(Paths.get("").toAbsolutePath().toString()+"/src/main/resources/haskhell.pdf",Paths.get("").toAbsolutePath().toString()+"/src/main/resources")
+    mergeToPdf("${Paths.get("").toAbsolutePath().toString()}/src/main/resources")
+    println(Paths.get("").toAbsolutePath().toString())
 
 }

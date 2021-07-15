@@ -40,20 +40,30 @@ def piplechain(fp, op):
 # （源图像– w*高斯模糊）/（1-w）；其中w表示权重（0.1～0.9），默认为0.6
 def usm(fp, op):
     src = cv2.imread(fp)
+    rows, cols, channels = src.shape
     blur_img = cv2.GaussianBlur(src, (0, 0), 5)
+
+    blank = np.zeros([rows, cols, channels], src.dtype)
     usm = cv2.addWeighted(src, 1.5, blur_img, -0.5, 0)
-    # h, w = src.shape[:2]
-    # result = np.zeros([h, w * 2, 3], dtype=src.dtype)
-    # result[0:h, 0:w, :] = src
-    # result[0:h, w:2 * w, :] = usm
-    cv2.imwrite(op, usm, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+    usm = cv2.addWeighted(usm, 1.2, blank, -0.4, -40)
+    # kernel = np.ones((2, 1), np.uint8)
+    # usm = cv2.erode(usm, kernel, iterations=1)
+    # for i in range(1):
+    #     blur_img = cv2.GaussianBlur(usm, (0, 0), 5)
+    #     usm = cv2.addWeighted(usm, 1.5, blur_img, -0.5, 0)
+    h, w = src.shape[:2]
+    result = np.zeros([h, w * 2, 3], dtype=src.dtype)
+    result[0:h, 0:w, :] = src
+    result[0:h, w:2 * w, :] = usm
+    cv2.imwrite(op, result, [cv2.IMWRITE_PNG_COMPRESSION, 0])
 
 
 if __name__ == "__main__":
     hk = "/media/lame/0DD80F300DD80F30/code/ok-pdf/src/main/resources/hk"
-    for root, dirs, files in os.walk("/media/lame/0DD80F300DD80F30/code/ok-pdf/src/main/resources/hashhell",
+    for root, dirs, files in os.walk("/media/lame/0DD80F300DD80F30/code/ok-pdf/src/main/resources/haskhell",
                                      topdown=False):
         for name in files:
             print("\n正在处理图片" + os.path.join(root, name))
+
             usm(os.path.join(root, name), os.path.join(hk, name))
             print("\n图片存储" + os.path.join(hk, name))
