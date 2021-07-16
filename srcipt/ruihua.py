@@ -46,16 +46,18 @@ def usm(fp, op):
     blank = np.zeros([rows, cols, channels], src.dtype)
     usm = cv2.addWeighted(src, 1.5, blur_img, -0.5, 0)
     usm = cv2.addWeighted(usm, 1.2, blank, -0.4, -40)
+    blur_img = cv2.GaussianBlur(usm, (0, 0), 4)
+    usm = cv2.addWeighted(usm, 1.5, blur_img, -0.5, 0)
     # kernel = np.ones((2, 1), np.uint8)
     # usm = cv2.erode(usm, kernel, iterations=1)
     # for i in range(1):
     #     blur_img = cv2.GaussianBlur(usm, (0, 0), 5)
     #     usm = cv2.addWeighted(usm, 1.5, blur_img, -0.5, 0)
-    h, w = src.shape[:2]
-    result = np.zeros([h, w * 2, 3], dtype=src.dtype)
-    result[0:h, 0:w, :] = src
-    result[0:h, w:2 * w, :] = usm
-    cv2.imwrite(op, result, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+    # h, w = src.shape[:2]
+    # result = np.zeros([h, w * 2, 3], dtype=src.dtype)
+    # result[0:h, 0:w, :] = src
+    # result[0:h, w:2 * w, :] = usm
+    cv2.imwrite(op, usm, [cv2.IMWRITE_PNG_COMPRESSION, 0])
 
 
 if __name__ == "__main__":
