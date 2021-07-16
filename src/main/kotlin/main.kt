@@ -56,7 +56,10 @@ data class Outline(val name: String, val page: Int, var outlines: List<Outline>?
 
 
 fun transformOutline(outline: Outline, parent: PDOutlineItem, doc: PDDocument) {
-    val pdPage = doc.getPage(outline.page)
+//    if ((outline.page - 4) < 0) {
+//        return
+//    }
+    val pdPage = doc.getPage(outline.page-4)
     val bookmark = PDOutlineItem()
     bookmark.title = outline.name
     val dest = PDPageFitWidthDestination()
@@ -141,12 +144,12 @@ fun planetTy(Q: Double, q: Double, b: Int, num: Int = 0) {
 fun main(args: Array<String>) {
 //    extractPdfImg(Paths.get("").toAbsolutePath().toString()+"/src/main/resources/haskhell.pdf",Paths.get("").toAbsolutePath().toString()+"/src/main/resources")
 //    mergeToPdf("${Paths.get("").toAbsolutePath().toString()}/src/main/resources")
-    println(Paths.get("").toAbsolutePath().toString())
-    val analyze =
-        analyzePDFOutline(Paths.get("").toAbsolutePath().toString() + "/src/main/resources/haskhell.pdf")
-    debuggerOutlines(analyze)
-//    extractOutline(
-//        Paths.get("").toAbsolutePath().toString() + "/src/main/resources/haskhell.pdf",
-//        Paths.get("").toAbsolutePath().toString() + "/src/main/resources/haskhell3.pdf"
-//    )
+//    println(Paths.get("").toAbsolutePath().toString())
+//    val analyze =
+//        analyzePDFOutline(Paths.get("").toAbsolutePath().toString() + "/src/main/resources/haskhell.pdf")
+//    debuggerOutlines(analyze)
+    copyOutlineStruct(
+        Paths.get("").toAbsolutePath().toString() + "/src/main/resources/haskhell.pdf",
+        Paths.get("").toAbsolutePath().toString() + "/src/main/resources/haskhell3.pdf"
+    )
 }
