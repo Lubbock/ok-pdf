@@ -15,7 +15,7 @@ fun addAuthor(fp: String): ClassInfo {
     val count = lines.filter { it.contains("@author") }.count()
     if (count <= 0) {
         lines.forEachIndexed { index, s ->
-            if (s.contains("class ${claz}") || s.contains("interface ${claz}")  || s.contains("enum ${claz}")) {
+            if (s.contains("class ${claz}") || s.contains("interface ${claz}") || s.contains("enum ${claz}")) {
                 classInfo = ClassInfo(claz, false, index)
             }
         }
@@ -30,17 +30,61 @@ fun addAuthor(fp: String): ClassInfo {
     return classInfo
 }
 
+data class LineEndComment(val modifyLine: String, val index: Int, val endComment: String)
+
+/*
+× 行尾注释转换
+* */
+fun transformEndLineComment(fp: String) {
+    var lines = FileUtils.readLines(File(fp))
+    val comments = ArrayList<LineEndComment>()
+    val newLines = ArrayList<String>()
+    lines.forEachIndexed { index, line ->
+        var ap = false
+        if (line.contains("//")) {
+            if (!line.trim().startsWith("//")
+                && !line.substringBefore("//").contains("*")
+                && !line.substringAfter("//").contains("\"")
+            ) {
+                ap = true
+                val sb = StringBuilder()
+                for (c in line) {
+                    if (c.isWhitespace()) {
+                        sb.append(c)
+                    } else {
+                        break
+                    }
+                }
+                newLines.add("${sb}/*\n${sb}*${line.substringAfter("//")}\n${sb}*/")
+                newLines.add(line.substringBefore("//"))
+                println("修改文件 fp:$fp\nindex:$index\t line:${line.substringBefore("//")}")
+            }
+        }
+        if (!ap) {
+            newLines.add(line)
+        }
+    }
+    FileUtils.writeLines(File(fp), "utf-8", newLines)
+}
+
+fun modifyokToOk(fp: String) {
+    val newLines = FileUtils.readLines(File(fp)).map {
+        if (it.contains("Result.ok")) {
+            it.replace("Result.ok", "Result.OK")
+        }else{
+            it
+        }
+    }
+    FileUtils.writeLines(File(fp), "utf-8", newLines)
+    println("修改Result.ok to OK ${fp.substringBeforeLast(".")}")
+}
+
 fun main(args: Array<String>) {
     val listFiles = FileUtils.listFiles(
         File("/media/lame/0DD80F300DD80F30/koal/kcsp-admin/kcsp-boot/kcsp-boot-module-system/src/main/java/kl/kcsp/modules"),
         FileFilterUtils.suffixFileFilter("java"), TrueFileFilter.INSTANCE
     )
     listFiles.forEach {
-        val addAuthor = addAuthor(it.absolutePath)
-        if (addAuthor.hasAuthorComment) {
-            println("已经添加了备注${addAuthor.name},无视之")
-        } else {
-            println("增加备注${addAuthor.name},欢喜之")
-        }
+        modifyokToOk(it.absolutePath)
     }
 }
