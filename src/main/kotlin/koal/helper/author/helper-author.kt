@@ -69,11 +69,7 @@ fun transformEndLineComment(fp: String) {
 
 fun modifyokToOk(fp: String) {
     val newLines = FileUtils.readLines(File(fp)).map {
-        if (it.contains("Result.ok")) {
-            it.replace("Result.ok", "Result.OK")
-        }else{
-            it
-        }
+        it.replace("Result.ok", "Result.OK")
     }
     FileUtils.writeLines(File(fp), "utf-8", newLines)
     println("修改Result.ok to OK ${fp.substringBeforeLast(".")}")
